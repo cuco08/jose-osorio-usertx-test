@@ -2,7 +2,7 @@ package mx.clip.assessment.user.tx.dao.util;
 
 import mx.clip.assessment.user.tx.dao.entities.UserTransaction;
 
-import java.util.Calendar;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 public class TestData {
@@ -15,7 +15,7 @@ public class TestData {
                 .transactionId(UUID.randomUUID().toString())
                 .amount(amount)
                 .description(description)
-                .date(Calendar.getInstance().getTime())
+                .date(LocalDateTime.now())
                 .build();
     }
 }

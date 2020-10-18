@@ -3,7 +3,6 @@ package mx.clip.assessment.user.tx.dao.entities;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
@@ -12,7 +11,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Entity
 @Data
@@ -33,5 +32,5 @@ public class UserTransaction {
 
     private String description;
 
-    private Date date;
+    private LocalDateTime date;
 }

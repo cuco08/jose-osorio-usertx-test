@@ -11,5 +11,22 @@
 
     <artifactId>user-transactions-service</artifactId>
 
+    <dependencies>
+        <dependency>
+            <artifactId>user-transactions-api</artifactId>
+            <groupId>mx.clip.assessment</groupId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <artifactId>user-transactions-dao</artifactId>
+            <groupId>mx.clip.assessment</groupId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
 
+        <dependency>
+            <groupId>commons-beanutils</groupId>
+            <artifactId>commons-beanutils</artifactId>
+            <version>1.9.3</version>
+        </dependency>
+    </dependencies>
 </project>
