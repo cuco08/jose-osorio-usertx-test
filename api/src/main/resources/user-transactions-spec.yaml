@@ -1,0 +1,125 @@
+---
+swagger: "2.0"
+info:
+  version: 1.0.0
+  title: User Transactions Schema Definitions
+
+paths: {}
+
+definitions:
+  AddUserTransactionRequest:
+    type: object
+    required:
+      - userId
+      - userTransaction
+    properties:
+      userId:
+        $ref: '#/definitions/UserId'
+      userTransaction:
+        $ref: '#/definitions/UserTransaction'
+
+  GetUserTransactionRequest:
+    type: object
+    required:
+      - userId
+      - transactionId
+    properties:
+      userId:
+        $ref: '#/definitions/UserId'
+      transactionId:
+        $ref: '#/definitions/TransactionId'
+
+  GetAllUserTransactionsResponse:
+    type: object
+    properties:
+      userTransactions:
+        type: array
+        items:
+          $ref: '#/definitions/UserTransaction'
+
+  SumUpUserTransactionsResponse:
+    type: object
+    properties:
+      userId:
+        $ref: '#/definitions/UserId'
+      sum:
+        type: string
+        description: "The total value of all the transaction amounts for a given user."
+
+  GetUserTransactionsReportResponse:
+    type: object
+    properties:
+      weeklyReports:
+        type: array
+        items:
+          $ref: '#/definitions/WeeklyReport'
+
+  UserIdentifierRequest:
+    required:
+      - userId
+    properties:
+      userId:
+        $ref: '#/definitions/UserId'
+
+  UserTransactionResponse:
+    properties:
+      userTransaction:
+        $ref: '#/definitions/UserTransaction'
+
+  UserTransaction:
+    type: object
+    required:
+      - amount
+      - description
+      - date
+    properties:
+      transactionId:
+        $ref: '#/definitions/TransactionId'
+      userId:
+        $ref: '#/definitions/UserId'
+      amount:
+        type: number
+        format: double
+        default: 0.0
+        description: "The transaction amount."
+      description:
+        type: string
+        description: "Brief description of the transaction."
+      date:
+        type: string
+        description: "The date when the transactions was initiated."
+    description: "Represents a user transaction."
+
+  UserId:
+    type: string
+    description: "The user identifier associated to a user transaction."
+
+  TransactionId:
+    type: string
+    description: "The transaction identifier."
+
+  WeeklyReport:
+    type: object
+    properties:
+      userId:
+        $ref: '#/definitions/UserId'
+      startWeek:
+        type: string
+        description: "The initial date when the weekly report starts off."
+      finishWeek:
+        type: string
+        description: "The final date when the weekly report finishes up."
+      quantity:
+        type: integer
+        description: "The number of transactions that happened in a given week."
+      amount:
+        type: number
+        format: double
+        default: 0.0
+        description: "The total amount of all the transactions that happened in a given week."
+      totalAmount:
+        type: number
+        format: double
+        default: 0.0
+        description: "The cumulative total amount of all the transactions that have happened until the given week."
+
