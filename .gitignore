@@ -1,6 +1,10 @@
 # Compiled class file
 *.class
 
+# Auto-generated stuff
+target/
+*.iml
+
 # Log file
 *.log
 
