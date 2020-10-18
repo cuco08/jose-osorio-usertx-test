@@ -15,6 +15,13 @@
         <start-class>mx.clip.assessment.user.tx.UserTransactionsApplication</start-class>
     </properties>
 
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+    </dependencies>
+
     <build>
         <plugins>
             <plugin>
