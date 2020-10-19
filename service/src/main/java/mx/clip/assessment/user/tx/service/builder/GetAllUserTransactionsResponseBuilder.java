@@ -4,6 +4,7 @@ import mx.clip.assessment.user.tx.api.model.GetAllUserTransactionsResponse;
 import mx.clip.assessment.user.tx.api.model.UserTransaction;
 import mx.clip.assessment.user.tx.service.mapper.UserTransactionMapper;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -30,6 +31,9 @@ public class GetAllUserTransactionsResponseBuilder {
     }
 
     public GetAllUserTransactionsResponseBuilder withUserTransactions(List<UserTransaction> userTransactionList) {
+        if (response.getUserTransactions() == null) {
+            response.setUserTransactions(new ArrayList<>());
+        }
         response.getUserTransactions().addAll(userTransactionList);
         return this;
     }

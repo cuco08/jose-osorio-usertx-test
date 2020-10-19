@@ -1,6 +1,7 @@
 package mx.clip.assessment.user.tx.service.mapper;
 
 import mx.clip.assessment.user.tx.api.model.UserTransaction;
+
 import org.springframework.beans.BeanUtils;
 
 import java.text.SimpleDateFormat;

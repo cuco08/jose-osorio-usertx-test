@@ -8,15 +8,10 @@ paths: {}
 
 definitions:
   AddUserTransactionRequest:
-    type: object
     required:
-      - userId
       - userTransaction
-    properties:
-      userId:
-        $ref: '#/definitions/UserId'
-      userTransaction:
-        $ref: '#/definitions/UserTransaction'
+    allOf:
+      - $ref: '#/definitions/UserTransaction'
 
   GetUserTransactionRequest:
     type: object
@@ -62,9 +57,8 @@ definitions:
         $ref: '#/definitions/UserId'
 
   UserTransactionResponse:
-    properties:
-      userTransaction:
-        $ref: '#/definitions/UserTransaction'
+    allOf:
+      - $ref: '#/definitions/UserTransaction'
 
   UserTransaction:
     type: object

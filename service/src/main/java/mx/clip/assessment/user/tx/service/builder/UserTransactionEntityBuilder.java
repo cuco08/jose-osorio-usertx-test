@@ -1,6 +1,6 @@
 package mx.clip.assessment.user.tx.service.builder;
 
-
+import mx.clip.assessment.user.tx.api.model.AddUserTransactionRequest;
 import mx.clip.assessment.user.tx.dao.entities.UserTransaction;
 
 import java.text.SimpleDateFormat;
@@ -20,18 +20,18 @@ public class UserTransactionEntityBuilder {
         simpleDateFormat = new SimpleDateFormat(dateFormatPattern);
     }
 
-    public UserTransactionEntityBuilder from(mx.clip.assessment.user.tx.api.model.UserTransaction fromUserTransaction) {
+    public UserTransactionEntityBuilder from(AddUserTransactionRequest request) {
 
-        this.withUserId(fromUserTransaction.getUserId())
+        this.withUserId(request.getUserId())
             .withTransactionId(UUID.randomUUID().toString())
-            .withAmount(fromUserTransaction.getAmount())
-            .withDescription(fromUserTransaction.getDescription());
+            .withAmount(request.getAmount())
+            .withDescription(request.getDescription());
 
         try {
-            final Date txnDate = simpleDateFormat.parse(fromUserTransaction.getDate());
+            final Date txnDate = simpleDateFormat.parse(request.getDate());
             this.withDate(LocalDateTime.ofInstant(txnDate.toInstant(), ZoneId.systemDefault()));
         } catch (Exception e) {
-
+            System.out.println("*********************** ERROR !!! ***********************");
         }
 
         return this;
