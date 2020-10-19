@@ -22,6 +22,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
+
 @RestController
 @RequestMapping(
         value = {"clip/v1"},
@@ -40,7 +42,8 @@ public class UserTransactionController {
         value = {"/user/transaction"},
         method = {RequestMethod.POST}
     )
-    public ResponseEntity<UserTransactionResponse> addTransaction(@ApiParam(value = "", required = true)
+    public ResponseEntity<UserTransactionResponse> addTransaction(@ApiParam(required = true)
+                                                                  @Valid
                                                                   @RequestBody AddUserTransactionRequest request) {
         return new ResponseEntity<>(userTransactionService.addUserTransaction(request),
                 HttpStatus.OK);
@@ -50,9 +53,8 @@ public class UserTransactionController {
         value = {"/user/{userId}/transaction/{transactionId}"},
         method = {RequestMethod.GET}
     )
-    public ResponseEntity<UserTransactionResponse> getTransaction(@ApiParam(value = "", required = true)
-                                                                         @PathVariable("userId") String userId,
-                                                                         @PathVariable("transactionId") String transactionId) {
+    public ResponseEntity<UserTransactionResponse> getTransaction(@PathVariable("userId") String userId,
+                                                                  @PathVariable("transactionId") String transactionId) {
         final GetUserTransactionRequest request = new GetUserTransactionRequestBuilder()
                 .withUserId(userId)
                 .withTransactionId(transactionId)
@@ -66,8 +68,7 @@ public class UserTransactionController {
         value = {"/user/{userId}/transaction"},
         method = {RequestMethod.GET}
     )
-    public ResponseEntity<GetAllUserTransactionsResponse> getAllTransactions(@ApiParam(value = "", required = true)
-                                                                          @PathVariable("userId") String userId) {
+    public ResponseEntity<GetAllUserTransactionsResponse> getAllTransactions(@PathVariable("userId") String userId) {
         final UserIdentifierRequest request = new UserIdentifierRequestBuilder()
                 .withUserId(userId)
                 .build();
@@ -80,8 +81,7 @@ public class UserTransactionController {
         value = {"/user/{userId}/transaction/sum"},
         method = {RequestMethod.GET}
     )
-    public ResponseEntity<SumUpUserTransactionsResponse> sumAllTransactions(@ApiParam(value = "", required = true)
-                                                                             @PathVariable("userId") String userId) {
+    public ResponseEntity<SumUpUserTransactionsResponse> sumAllTransactions(@PathVariable("userId") String userId) {
         final UserIdentifierRequest request = new UserIdentifierRequestBuilder()
                 .withUserId(userId)
                 .build();
@@ -94,8 +94,7 @@ public class UserTransactionController {
             value = {"/user/{userId}/transaction/report"},
             method = {RequestMethod.GET}
     )
-    public ResponseEntity<GetUserTransactionsReportResponse> getTransactionsReport(@ApiParam(value = "", required = true)
-                                                                            @PathVariable("userId") String userId) {
+    public ResponseEntity<GetUserTransactionsReportResponse> getTransactionsReport(@PathVariable("userId") String userId) {
         final UserIdentifierRequest request = new UserIdentifierRequestBuilder()
                 .withUserId(userId)
                 .build();

@@ -5,9 +5,9 @@ import mx.clip.assessment.user.tx.dao.entities.UserTransaction;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-public class TestData {
+public class DaoTestData {
 
-    private TestData() {}
+    private DaoTestData() {}
 
     public static UserTransaction getUserTransaction(double amount, String description) {
         return UserTransaction.builder()

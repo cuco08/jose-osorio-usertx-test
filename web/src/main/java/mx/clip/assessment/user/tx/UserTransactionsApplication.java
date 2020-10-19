@@ -59,6 +59,13 @@ public class UserTransactionsApplication {
 					LocalDateTime.of(2019, 12, 6, 13, 00)));
 			repository.save(UserTransactionData.createUserTransaction("01",
 					LocalDateTime.of(2019, 11, 30, 12, 00)));
+
+			repository.save(UserTransactionData.createUserTransaction("02",
+					LocalDateTime.of(2020, 1, 1, 12, 00)));
+			repository.save(UserTransactionData.createUserTransaction("02",
+					LocalDateTime.of(2020, 12, 31, 12, 00)));
+			repository.save(UserTransactionData.createUserTransaction("02",
+					LocalDateTime.of(2019, 12, 31, 12, 00)));
         };
     }
 }

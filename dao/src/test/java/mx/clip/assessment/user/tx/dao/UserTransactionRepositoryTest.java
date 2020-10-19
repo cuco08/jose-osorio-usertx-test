@@ -2,7 +2,7 @@ package mx.clip.assessment.user.tx.dao;
 
 import mx.clip.assessment.user.tx.dao.entities.UserTransaction;
 
-import mx.clip.assessment.user.tx.dao.util.TestData;
+import mx.clip.assessment.user.tx.dao.util.DaoTestData;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
@@ -31,7 +31,7 @@ public class UserTransactionRepositoryTest {
 
     @Test
     public void shouldFindNewUserTransactionByUserId() {
-        final UserTransaction tx = repository.save(TestData.getUserTransaction(12.25, "Next tx #n"));
+        final UserTransaction tx = repository.save(DaoTestData.getUserTransaction(12.25, "Next tx #n"));
 
         assertThat(tx).isNotNull();
         assertThat(tx.getAmount()).isEqualTo(12.25);
@@ -47,7 +47,7 @@ public class UserTransactionRepositoryTest {
 
     @Test
     public void shouldFindNewUserTransactionByTransactionId() {
-        final UserTransaction tx = repository.save(TestData.getUserTransaction(8.35, "Next tx #n"));
+        final UserTransaction tx = repository.save(DaoTestData.getUserTransaction(8.35, "Next tx #n"));
 
         assertThat(tx).isNotNull();
         assertThat(tx.getAmount()).isEqualTo(8.35);
@@ -75,18 +75,18 @@ public class UserTransactionRepositoryTest {
 
     @Test
     public void shouldFindManyUserTransactionByUserId() {
-        UserTransaction testUserTx = TestData.getUserTransaction(8.35, "Next tx #n1");
+        UserTransaction testUserTx = DaoTestData.getUserTransaction(8.35, "Next tx #n1");
         final UserTransaction savedUserTx = repository.save(testUserTx);
 
-        testUserTx = TestData.getUserTransaction(2.35, "Next tx #n2");
+        testUserTx = DaoTestData.getUserTransaction(2.35, "Next tx #n2");
         testUserTx.setUserId(savedUserTx.getUserId());
         repository.save(testUserTx);
 
-        testUserTx = TestData.getUserTransaction(3.35, "Next tx #n3");
+        testUserTx = DaoTestData.getUserTransaction(3.35, "Next tx #n3");
         testUserTx.setUserId(savedUserTx.getUserId());
         repository.save(testUserTx);
 
-        testUserTx = TestData.getUserTransaction(4.35, "Next tx #n4");
+        testUserTx = DaoTestData.getUserTransaction(4.35, "Next tx #n4");
         testUserTx.setUserId(savedUserTx.getUserId());
         repository.save(testUserTx);
 

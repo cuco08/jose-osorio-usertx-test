@@ -1,6 +1,8 @@
 package mx.clip.assessment.user.tx.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 
 import mx.clip.assessment.user.tx.api.UserTransactionsApi;
 import mx.clip.assessment.user.tx.api.model.WeeklyReport;
@@ -19,11 +21,15 @@ import mx.clip.assessment.user.tx.dao.entities.UserTransaction;
 import mx.clip.assessment.user.tx.service.builder.UserTransactionEntityBuilder;
 
 import mx.clip.assessment.user.tx.service.builder.WeeklyReportBuilder;
+import mx.clip.assessment.user.tx.service.exception.ServiceResultCode;
+import mx.clip.assessment.user.tx.service.exception.UserTransactionServiceException;
 import mx.clip.assessment.user.tx.service.factory.LocalDateTimeFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
@@ -32,13 +38,19 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
+@Setter
 public class UserTransactionService implements UserTransactionsApi {
 
     private final UserTransactionRepository repository;
 
     private final LocalDateTimeFactory localDateTimeFactory;
 
-    private final String dateFormatPattern = "yyyy-MM-dd";
+    @Value("${user.transactions.datetime.pattern}")
+    private String dateFormatPattern;
+
+    @Value("${user.transactions.datetime.pattern.report}")
+    private String reportDateFormatPattern;
 
     @Override
     public UserTransactionResponse addUserTransaction(AddUserTransactionRequest request) {
@@ -59,7 +71,8 @@ public class UserTransactionService implements UserTransactionsApi {
                 .stream()
                 .filter(txn -> txn.getTransactionId().equals(request.getTransactionId()))
                 .findFirst()
-                .orElseThrow(RuntimeException::new);
+                .orElseThrow(() -> new UserTransactionServiceException("Transaction not found for the given user.",
+                        ServiceResultCode.NO_DATA_FOUND));
 
         return new UserTransactionResponseBuilder(dateFormatPattern)
                 .from(userTransactionEntity)
@@ -70,6 +83,8 @@ public class UserTransactionService implements UserTransactionsApi {
     public GetAllUserTransactionsResponse getAllUserTransactions(UserIdentifierRequest request) {
 
         final List<UserTransaction> userTransactionEntityList = findSortedUserTransactions(request.getUserId());
+
+        log.debug("Total number of transactions for user={} is {}", request.getUserId(), userTransactionEntityList.size());
 
         return new GetAllUserTransactionsResponseBuilder(dateFormatPattern)
                 .from(userTransactionEntityList)
@@ -84,6 +99,8 @@ public class UserTransactionService implements UserTransactionsApi {
                 .mapToDouble(UserTransaction::getAmount)
                 .reduce(0.0, (subtotal, txnAmount) -> subtotal + txnAmount);
 
+        log.debug("Total amount for transactions of user={} is {}", totalAmount, request.getUserId());
+
         return new SumUpUserTransactionsResponseBuilder()
                 .withUserId(request.getUserId())
                 .withSum(String.valueOf(totalAmount))
@@ -93,17 +110,25 @@ public class UserTransactionService implements UserTransactionsApi {
     @Override
     public GetUserTransactionsReportResponse getUserTransactionsReport(UserIdentifierRequest request) {
         final GetUserTransactionsReportResponse response = new GetUserTransactionsReportResponse();
+        response.setWeeklyReports(new ArrayList<>());
+
         final Queue<UserTransaction> queue = new LinkedList<>(findSortedUserTransactions(request.getUserId()));
         double cumulativeAmount = 0;
+
+        log.debug("Creating report for {} transactions", queue.size());
 
         while (!queue.isEmpty()) {
 
             LocalDateTime startDate = localDateTimeFactory.getStartLocalDateTime(queue.peek().getDate());
             LocalDateTime endDate = localDateTimeFactory.getEndLocalDateTime(queue.peek().getDate());
 
+            log.debug("Setting startDate={} and endDate={} for given initialDate={}", startDate, endDate, queue.peek().getDate());
+
             final List<UserTransaction> weeklyUserTxns = queue.stream()
                     .filter(txn -> isInRange(txn.getDate(), startDate, endDate))
                     .collect(Collectors.toList());
+
+            log.debug("{} transactions found for the given start-end dates.", weeklyUserTxns.size());
 
             double amount =  weeklyUserTxns.stream()
                     .mapToDouble(UserTransaction::getAmount)
@@ -114,19 +139,18 @@ public class UserTransactionService implements UserTransactionsApi {
 
             final WeeklyReport weeklyReport = new WeeklyReportBuilder()
                     .withUserId(request.getUserId())
-                    .withStartWeek(startDate.format(DateTimeFormatter.ofPattern(dateFormatPattern)))
-                    .withFinishWeek(endDate.format(DateTimeFormatter.ofPattern(dateFormatPattern)))
+                    .withStartWeek(startDate.format(DateTimeFormatter.ofPattern(reportDateFormatPattern)))
+                    .withFinishWeek(endDate.format(DateTimeFormatter.ofPattern(reportDateFormatPattern)))
                     .withQuantity(weeklyUserTxns.size())
                     .withAmount(amount)
                     .withTotalAmount(cumulativeAmount)
                     .build();
 
             cumulativeAmount += amount;
-            System.out.println("Weekly report : " + weeklyReport);
             response.addWeeklyReportsItem(weeklyReport);
         }
 
-        System.out.println("Cumulative amount : " + cumulativeAmount);
+        log.info("Cumulative amount={} for all the transactions of user={}",cumulativeAmount, request.getUserId());
 
         return response;
     }

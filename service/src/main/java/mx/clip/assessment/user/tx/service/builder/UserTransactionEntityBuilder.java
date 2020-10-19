@@ -1,7 +1,10 @@
 package mx.clip.assessment.user.tx.service.builder;
 
+import lombok.extern.slf4j.Slf4j;
 import mx.clip.assessment.user.tx.api.model.AddUserTransactionRequest;
 import mx.clip.assessment.user.tx.dao.entities.UserTransaction;
+import mx.clip.assessment.user.tx.service.exception.ServiceResultCode;
+import mx.clip.assessment.user.tx.service.exception.UserTransactionServiceException;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
@@ -9,6 +12,7 @@ import java.time.ZoneId;
 import java.util.Date;
 import java.util.UUID;
 
+@Slf4j
 public class UserTransactionEntityBuilder {
 
     private UserTransaction  userTransaction;
@@ -31,7 +35,9 @@ public class UserTransactionEntityBuilder {
             final Date txnDate = simpleDateFormat.parse(request.getDate());
             this.withDate(LocalDateTime.ofInstant(txnDate.toInstant(), ZoneId.systemDefault()));
         } catch (Exception e) {
-            System.out.println("*********************** ERROR !!! ***********************");
+            log.error("An error occurred while trying to parse the transaction date from the request.", e);
+            throw new UserTransactionServiceException(
+                    "An error occurred while trying to parse the transaction date from the request.", e, ServiceResultCode.BAD_REQUEST);
         }
 
         return this;

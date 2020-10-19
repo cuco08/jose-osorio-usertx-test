@@ -1,6 +1,6 @@
 package mx.clip.assessment.user.tx.dao;
 
-import mx.clip.assessment.user.tx.dao.util.TestData;
+import mx.clip.assessment.user.tx.dao.util.DaoTestData;
 
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -17,8 +17,8 @@ public class UserTransactionRepositoryApplicationTest {
     @Bean
     public CommandLineRunner demo(UserTransactionRepository repository) {
         return (args) -> {
-            repository.save(TestData.getUserTransaction(23.50, "Dummy tx #1"));
-            repository.save(TestData.getUserTransaction(15.45, "Dummy tx #2"));
+            repository.save(DaoTestData.getUserTransaction(23.50, "Dummy tx #1"));
+            repository.save(DaoTestData.getUserTransaction(15.45, "Dummy tx #2"));
         };
     }
 }
