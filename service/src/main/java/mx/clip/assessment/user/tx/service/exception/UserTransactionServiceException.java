@@ -13,14 +13,6 @@ public class UserTransactionServiceException extends RuntimeException {
         this(message, cause, domainResultCode, domainResultCode != null ? domainResultCode.name() : null, null);
     }
 
-    public UserTransactionServiceException(String message, ServiceResultCode domainResultCode, String errorCode) {
-        this(message, (Throwable)null, domainResultCode, errorCode, null);
-    }
-
-    public UserTransactionServiceException(String message, Throwable cause, ServiceResultCode domainResultCode, String errorCode) {
-        this(message, cause, domainResultCode, errorCode, null);
-    }
-
     public UserTransactionServiceException(String message, Throwable cause, ServiceResultCode domainResultCode, String errorCode, String callTrace) {
         super(message, cause);
         this.domainResultCode = domainResultCode;

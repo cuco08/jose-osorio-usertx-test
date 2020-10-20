@@ -15,8 +15,12 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.time.DayOfWeek;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 
 import static mx.clip.assessment.user.tx.service.util.ServiceTestData.*;
 
@@ -31,11 +35,9 @@ class UserTransactionServiceTest {
 
     private final UserTransactionRepository repository = mock(UserTransactionRepository.class);
 
-    private final LocalDateTimeFactory localDateTimeFactory = mock(LocalDateTimeFactory.class);
-
     @BeforeEach
     void setup() {
-        serviceApi = new UserTransactionService(repository, localDateTimeFactory);
+        serviceApi = new UserTransactionService(repository, new LocalDateTimeFactory());
         serviceApi.setDateFormatPattern("yyyy-mm-dd");
         serviceApi.setReportDateFormatPattern("yyyy-mm-dd EEEE");
     }
@@ -150,12 +152,45 @@ class UserTransactionServiceTest {
     }
 
     @Test
-    void shouldGetUserTransactionsReport() {
+    void shouldGetUserTransactionsReport_FridayToThursday() {
 
-        when(repository.findByUserId(any())).thenReturn(Collections.emptyList());
+        UserTransaction userTransaction = getUserTransactionEntity(UUID.randomUUID().toString(),
+                LocalDateTime.of(2020, 5, 14, 12, 00));
+
+        shouldGetUserTransactionsReport(userTransaction, DayOfWeek.FRIDAY, DayOfWeek.THURSDAY);
+    }
+
+    @Test
+    void shouldGetUserTransactionsReport_TuesdayToSaturday() {
+
+        UserTransaction userTransaction = getUserTransactionEntity(UUID.randomUUID().toString(),
+                LocalDateTime.of(2020, 9, 3, 12, 00));
+
+        shouldGetUserTransactionsReport(userTransaction, DayOfWeek.TUESDAY, DayOfWeek.THURSDAY);
+    }
+
+    @Test
+    void shouldGetUserTransactionsReport_MondayToThursday() {
+
+        UserTransaction userTransaction = getUserTransactionEntity(UUID.randomUUID().toString(),
+                LocalDateTime.of(2020, 2, 29, 12, 00));
+
+        shouldGetUserTransactionsReport(userTransaction, DayOfWeek.FRIDAY, DayOfWeek.SATURDAY);
+    }
+
+    private void shouldGetUserTransactionsReport(UserTransaction userTransaction, DayOfWeek start, DayOfWeek end) {
+
+        List<UserTransaction> userTransactionList = new ArrayList<>();
+        userTransactionList.add(userTransaction);
+
+        when(repository.findByUserId(any())).thenReturn(userTransactionList);
         GetUserTransactionsReportResponse response = serviceApi.getUserTransactionsReport(getRandomUserIdentifierRequest());
 
         assertThat(response).isNotNull();
+        assertThat(response.getWeeklyReports()).isNotEmpty();
+        assertThat(response.getWeeklyReports().size()).isEqualTo(1);
+        assertThat(response.getWeeklyReports().get(0).getStartWeek()).containsIgnoringCase(start.name());
+        assertThat(response.getWeeklyReports().get(0).getFinishWeek()).containsIgnoringCase(end.name());
     }
 
     @Test
@@ -170,5 +205,8 @@ class UserTransactionServiceTest {
 
     @Test
     void shouldGetRandomUserTransaction() {
+        assertThrows(UserTransactionServiceException.class, () ->
+            serviceApi.getRandomUserTransaction()
+        );
     }
 }

@@ -29,6 +29,18 @@ public class ServiceTestData {
         return userTransaction;
     }
 
+    public static UserTransaction getUserTransactionEntity(String userId, LocalDateTime date) {
+        UserTransaction userTransaction = new UserTransactionEntityBuilder("yyyy-mm-dd")
+                .withUserId(userId)
+                .withTransactionId(UUID.randomUUID().toString())
+                .withDescription("Test description")
+                .withAmount(10.0)
+                .withDate(date)
+                .build();
+
+        return userTransaction;
+    }
+
     public static List<UserTransaction> getUserTransactionEntityList() {
         List<UserTransaction> list = new ArrayList<>();
         list.add(getUserTransactionEntity());

@@ -157,7 +157,7 @@ public class UserTransactionService implements UserTransactionsApi {
 
     @Override
     public UserTransactionResponse getRandomUserTransaction() {
-        return null;
+        throw new UserTransactionServiceException("Not implemented yet.", ServiceResultCode.NOT_IMPLEMENTED);
     }
 
     private List<UserTransaction> findSortedUserTransactions(String userId) {
