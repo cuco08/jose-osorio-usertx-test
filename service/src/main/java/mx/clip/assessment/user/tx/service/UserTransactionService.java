@@ -19,11 +19,12 @@ import mx.clip.assessment.user.tx.api.model.UserTransactionResponse;
 import mx.clip.assessment.user.tx.dao.UserTransactionRepository;
 import mx.clip.assessment.user.tx.dao.entities.UserTransaction;
 import mx.clip.assessment.user.tx.service.builder.UserTransactionEntityBuilder;
-
 import mx.clip.assessment.user.tx.service.builder.WeeklyReportBuilder;
 import mx.clip.assessment.user.tx.service.exception.ServiceResultCode;
 import mx.clip.assessment.user.tx.service.exception.UserTransactionServiceException;
 import mx.clip.assessment.user.tx.service.factory.LocalDateTimeFactory;
+import mx.clip.assessment.user.tx.service.validator.BasicRequestValidator;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -54,6 +55,8 @@ public class UserTransactionService implements UserTransactionsApi {
 
     @Override
     public UserTransactionResponse addUserTransaction(AddUserTransactionRequest request) {
+
+        BasicRequestValidator.validate(request);
 
         final UserTransaction newUserTransactionEntity = repository.save(
                 new UserTransactionEntityBuilder(dateFormatPattern).from(request).build()

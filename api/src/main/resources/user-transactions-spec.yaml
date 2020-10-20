@@ -76,12 +76,15 @@ definitions:
         format: double
         default: 0.0
         description: "The transaction amount."
+        nullable: false
       description:
         type: string
         description: "Brief description of the transaction."
+        nullable: false
       date:
         type: string
         description: "The date when the transactions was initiated."
+        nullable: false
     description: "Represents a user transaction."
 
   UserId:
