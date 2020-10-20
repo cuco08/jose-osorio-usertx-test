@@ -1,5 +1,8 @@
 package mx.clip.assessment.user.tx.service.exception;
 
+import lombok.Getter;
+
+@Getter
 public enum ServiceResultCode {
     BAD_REQUEST(400),
     NO_DATA_FOUND(404),

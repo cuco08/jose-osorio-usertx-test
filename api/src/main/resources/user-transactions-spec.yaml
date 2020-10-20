@@ -116,3 +116,13 @@ definitions:
         format: double
         default: 0.0
         description: "The cumulative total amount of all the transactions that have happened until the given week."
+
+  ErrorResponse:
+    type: object
+    properties:
+      status:
+        type: string
+      message:
+        type: string
+      timeStamp:
+        type: string
