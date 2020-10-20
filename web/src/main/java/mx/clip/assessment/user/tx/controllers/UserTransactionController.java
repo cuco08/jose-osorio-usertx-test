@@ -102,4 +102,14 @@ public class UserTransactionController {
         return new ResponseEntity<>(userTransactionService.getUserTransactionsReport(request),
                 HttpStatus.OK);
     }
+
+    @RequestMapping(
+            value = {"/user/transaction/random"},
+            method = {RequestMethod.GET}
+    )
+    public ResponseEntity<UserTransactionResponse> getRandomUserTransaction() {
+
+        return new ResponseEntity<>(userTransactionService.getRandomUserTransaction(),
+                HttpStatus.OK);
+    }
 }
