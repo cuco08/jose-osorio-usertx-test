@@ -1,12 +1,12 @@
 Description
--------------------------
+==============================
 This repo contains an API that provides operations related to user transactions. The operations are implemented as REST 
 services to add, read, calculate and get reports of the user transactions from an in-memory database. For more details
 please have a look at the original [requirements](https://github.com/cesaralcancio/simple-test).
 
 
 Dev Requirement
--------------------------
+==============================
 * java version 1.8.x
 * maven version 3.x.x
 * Unix based operating system or Cygwin on Windows (or something similar to be able to run bash scripts)
