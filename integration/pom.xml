@@ -11,5 +11,11 @@
 
     <artifactId>user-transactions-integration</artifactId>
 
-
+    <dependencies>
+        <dependency>
+            <groupId>mx.clip.assessment</groupId>
+            <artifactId>user-transactions-web</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
 </project>

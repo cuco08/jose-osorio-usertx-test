@@ -8,7 +8,6 @@
 		<module>api</module>
 		<module>service</module>
 		<module>dao</module>
-		<module>client</module>
 		<module>integration</module>
 		<module>assembly</module>
     </modules>
