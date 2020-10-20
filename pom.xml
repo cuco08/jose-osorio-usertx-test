@@ -8,8 +8,6 @@
 		<module>api</module>
 		<module>service</module>
 		<module>dao</module>
-		<module>integration</module>
-		<module>assembly</module>
     </modules>
     <parent>
 		<groupId>org.springframework.boot</groupId>
