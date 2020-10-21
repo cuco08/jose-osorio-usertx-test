@@ -37,7 +37,7 @@ public class UserTransactionEntityBuilder {
         } catch (Exception e) {
             log.error("An error occurred while trying to parse the transaction date from the request.", e);
             throw new UserTransactionServiceException(
-                    "Transaction date is not in the correct format: yyyy-mm-dd.", e, ServiceResultCode.BAD_REQUEST);
+                    "Transaction date is not in the correct format: yyyy-mm-dd.", ServiceResultCode.BAD_REQUEST);
         }
 
         return this;
