@@ -98,6 +98,10 @@ Locally the server runs at port 8080.
 **NOTE**: By default the application loads a set of user transactions on [startup](web/src/main/java/mx/clip/assessment/user/tx/UserTransactionsApplication.java) 
 with *userId='01'* and *userId='02'*. Feel free to make use of these 2 users to exercise a bit the application.
 
+There is an online tool very useful to represent json content in a table and tree format. Feel free to use this tool
+in case you want to visualize the weekly report http://json2table.com. All you need to do is copy your json object and
+click the play button.
+
 Implementation details
 ==============================
 
