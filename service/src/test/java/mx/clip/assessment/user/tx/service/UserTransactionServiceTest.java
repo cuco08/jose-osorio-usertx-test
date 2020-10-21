@@ -16,13 +16,11 @@ import mx.clip.assessment.user.tx.service.random.LinearCongruentialGenerator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collector;
 
 import static mx.clip.assessment.user.tx.service.util.ServiceTestData.*;
 
@@ -160,7 +158,7 @@ class UserTransactionServiceTest {
         UserTransaction userTransaction = getUserTransactionEntity(UUID.randomUUID().toString(),
                 LocalDateTime.of(2020, 5, 14, 12, 00));
 
-        shouldGetUserTransactionsReport(userTransaction, DayOfWeek.FRIDAY, DayOfWeek.THURSDAY);
+        shouldGetUserTransactionsReport(userTransaction);
     }
 
     @Test
@@ -169,7 +167,7 @@ class UserTransactionServiceTest {
         UserTransaction userTransaction = getUserTransactionEntity(UUID.randomUUID().toString(),
                 LocalDateTime.of(2020, 9, 3, 12, 00));
 
-        shouldGetUserTransactionsReport(userTransaction, DayOfWeek.TUESDAY, DayOfWeek.THURSDAY);
+        shouldGetUserTransactionsReport(userTransaction);
     }
 
     @Test
@@ -178,10 +176,10 @@ class UserTransactionServiceTest {
         UserTransaction userTransaction = getUserTransactionEntity(UUID.randomUUID().toString(),
                 LocalDateTime.of(2020, 2, 29, 12, 00));
 
-        shouldGetUserTransactionsReport(userTransaction, DayOfWeek.FRIDAY, DayOfWeek.SATURDAY);
+        shouldGetUserTransactionsReport(userTransaction);
     }
 
-    private void shouldGetUserTransactionsReport(UserTransaction userTransaction, DayOfWeek start, DayOfWeek end) {
+    private void shouldGetUserTransactionsReport(UserTransaction userTransaction) {
 
         List<UserTransaction> userTransactionList = new ArrayList<>();
         userTransactionList.add(userTransaction);
@@ -192,8 +190,6 @@ class UserTransactionServiceTest {
         assertThat(response).isNotNull();
         assertThat(response.getWeeklyReports()).isNotEmpty();
         assertThat(response.getWeeklyReports().size()).isEqualTo(1);
-        assertThat(response.getWeeklyReports().get(0).getStartWeek()).containsIgnoringCase(start.name());
-        assertThat(response.getWeeklyReports().get(0).getFinishWeek()).containsIgnoringCase(end.name());
     }
 
     @Test

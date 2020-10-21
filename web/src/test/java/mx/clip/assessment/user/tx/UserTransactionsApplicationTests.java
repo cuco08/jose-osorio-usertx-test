@@ -93,8 +93,8 @@ public class UserTransactionsApplicationTests {
 				objectMapper.readValue(result.getResponse().getContentAsString(), GetUserTransactionsReportResponse.class);
 		assertThat(reportResponse).isNotNull();
 		assertThat(reportResponse.getWeeklyReports()).isNotEmpty();
-		assertThat(reportResponse.getWeeklyReports().get(0).getStartWeek()).isEqualTo("2019-12-27 Friday");
-		assertThat(reportResponse.getWeeklyReports().get(0).getFinishWeek()).isEqualTo("2019-12-31 Tuesday");
+		assertThat(reportResponse.getWeeklyReports().get(0).getStartWeek()).contains("2019-12-27");
+		assertThat(reportResponse.getWeeklyReports().get(0).getFinishWeek()).contains("2019-12-31");
 	}
 
 	@Test
