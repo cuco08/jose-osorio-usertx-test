@@ -12,6 +12,7 @@ import mx.clip.assessment.user.tx.service.factory.LocalDateTimeFactory;
 import static mx.clip.assessment.user.tx.service.util.ServiceTestData.getUserTransactionEntityList;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import mx.clip.assessment.user.tx.service.random.LinearCongruentialGenerator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -21,6 +22,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collector;
 
 import static mx.clip.assessment.user.tx.service.util.ServiceTestData.*;
 
@@ -38,7 +40,7 @@ class UserTransactionServiceTest {
 
     @BeforeEach
     void setup() {
-        serviceApi = new UserTransactionService(repository, new LocalDateTimeFactory());
+        serviceApi = new UserTransactionService(repository, new LocalDateTimeFactory(), new LinearCongruentialGenerator(1));
         serviceApi.setDateFormatPattern("yyyy-mm-dd");
         serviceApi.setReportDateFormatPattern("yyyy-mm-dd EEEE");
     }
@@ -206,6 +208,21 @@ class UserTransactionServiceTest {
 
     @Test
     void shouldGetRandomUserTransaction() {
+        List<UserTransaction> customList = getUserTransactionEntityList();
+
+        when(repository.findAll()).thenReturn(customList);
+
+        UserTransactionResponse response = serviceApi.getRandomUserTransaction();
+
+        assertThat(response).isNotNull();
+        assertThat(response.getTransactionId()).isNotNull();
+    }
+
+    @Test
+    void shouldNotGetRandomUserTransaction_NoTransactions() {
+
+        when(repository.findAll()).thenReturn(Collections.emptyList());
+
         assertThrows(UserTransactionServiceException.class, () ->
             serviceApi.getRandomUserTransaction()
         );

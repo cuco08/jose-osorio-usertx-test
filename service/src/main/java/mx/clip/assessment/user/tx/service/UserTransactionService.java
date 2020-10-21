@@ -23,6 +23,7 @@ import mx.clip.assessment.user.tx.service.builder.WeeklyReportBuilder;
 import mx.clip.assessment.user.tx.service.exception.ServiceResultCode;
 import mx.clip.assessment.user.tx.service.exception.UserTransactionServiceException;
 import mx.clip.assessment.user.tx.service.factory.LocalDateTimeFactory;
+import mx.clip.assessment.user.tx.service.random.PseudoRandomGenerator;
 import mx.clip.assessment.user.tx.service.validator.BasicRequestValidator;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -36,6 +37,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 @Service
 @RequiredArgsConstructor
@@ -46,6 +48,8 @@ public class UserTransactionService implements UserTransactionsApi {
     private final UserTransactionRepository repository;
 
     private final LocalDateTimeFactory localDateTimeFactory;
+
+    private final PseudoRandomGenerator pseudoRandomGenerator;
 
     @Value("${user.transactions.datetime.pattern}")
     private String dateFormatPattern;
@@ -160,7 +164,24 @@ public class UserTransactionService implements UserTransactionsApi {
 
     @Override
     public UserTransactionResponse getRandomUserTransaction() {
-        throw new UserTransactionServiceException("Not implemented yet.", ServiceResultCode.NOT_IMPLEMENTED);
+
+        Iterable<UserTransaction> allTransactions = repository.findAll();
+
+        List<UserTransaction> transactionList = StreamSupport.stream(allTransactions.spliterator(), false)
+                .collect(Collectors.toList());
+
+        if (transactionList.isEmpty()) {
+            throw new UserTransactionServiceException("No transactions found.", ServiceResultCode.NO_DATA_FOUND);
+        }
+
+        int randomNumber = pseudoRandomGenerator.nextInt() % transactionList.size();
+
+        log.debug("Returning random transaction at index={}", randomNumber);
+        UserTransaction randomTransactionEntity = transactionList.get(randomNumber);
+
+        return new UserTransactionResponseBuilder(dateFormatPattern)
+                .from(randomTransactionEntity)
+                .build();
     }
 
     private List<UserTransaction> findSortedUserTransactions(String userId) {

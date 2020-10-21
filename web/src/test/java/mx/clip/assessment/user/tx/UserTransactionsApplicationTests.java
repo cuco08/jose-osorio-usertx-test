@@ -116,6 +116,6 @@ public class UserTransactionsApplicationTests {
 	public void testGetRandomTransaction() throws Exception {
 		mockMvc.perform(get("/clip/v1/user/transaction/random")
 				.contentType("application/json"))
-				.andExpect(status().is5xxServerError());
+				.andExpect(status().isOk());
 	}
 }

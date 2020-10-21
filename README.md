@@ -82,6 +82,14 @@ The following HTTP operations are implemented:
     
     > Sample request:
     $curl -X GET "http://localhost:8080/clip/v1/user/01/transaction/report" -H 'Content-Type: application/json'
+    
+* GET /clip/v1/user/transaction/random
+    > Gets one random transaction amongst all the existing transactions of all users.
+    Returns 200 and the random user transaction information.
+    Returns 404 if there are no transactions in the DB.
+    
+    > Sample request:
+    $curl -X GET "http://localhost:8080/clip/v1/user/transaction/random" -H 'Content-Type: application/json'
 ```
 
 You can use postman, curl or any other application that allows you to hit the above endpoints.
