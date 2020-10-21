@@ -95,6 +95,9 @@ The following HTTP operations are implemented:
 You can use postman, curl or any other application that allows you to hit the above endpoints.
 Locally the server runs at port 8080.
 
+**NOTE**: By default the application loads a set of user transactions on [startup](web/src/main/java/mx/clip/assessment/user/tx/UserTransactionsApplication.java) 
+with *userId='01'* and *userId='02'*. Feel free to make use of these 2 users to exercise a bit the application.
+
 Implementation details
 ==============================
 
